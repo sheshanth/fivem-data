@@ -191,7 +191,7 @@ const InventoryContainer = Vue.createApp({
             let inventoryName = this.otherInventoryName;
             Object.assign(this, this.getInitialState());
             try {
-                await axios.post("https://qb-inventory/CloseInventory", { name: inventoryName });
+                await axios.post("https://ps-inventory/CloseInventory", { name: inventoryName });
             } catch (error) {
                 console.error("Error closing inventory:", error);
             }
@@ -391,7 +391,7 @@ const InventoryContainer = Vue.createApp({
                 };
                 const draggingItem = this.currentlyDraggingItem;
                 try {
-                    const response = await axios.post("https://qb-inventory/DropItem", {
+                    const response = await axios.post("https://ps-inventory/DropItem", {
                         ...newItem,
                         fromSlot: this.currentlyDraggingSlot,
                     });
@@ -502,7 +502,7 @@ const InventoryContainer = Vue.createApp({
         },
         async handlePurchase(targetSlot, sourceSlot, sourceItem, transferAmount) {
             try {
-                const response = await axios.post("https://qb-inventory/AttemptPurchase", {
+                const response = await axios.post("https://ps-inventory/AttemptPurchase", {
                     item: sourceItem,
                     amount: transferAmount || sourceItem.amount,
                     shop: this.otherInventoryName,
@@ -584,7 +584,7 @@ const InventoryContainer = Vue.createApp({
                     };
 
                     try {
-                        const response = await axios.post("https://qb-inventory/DropItem", {
+                        const response = await axios.post("https://ps-inventory/DropItem", {
                             ...newItem,
                             fromSlot: item.slot,
                         });
@@ -610,7 +610,7 @@ const InventoryContainer = Vue.createApp({
             const playerItemKey = Object.keys(this.playerInventory).find((key) => this.playerInventory[key] && this.playerInventory[key].slot === item.slot);
             if (playerItemKey) {
                 try {
-                    await axios.post("https://qb-inventory/UseItem", {
+                    await axios.post("https://ps-inventory/UseItem", {
                         inventory: "player",
                         item: item,
                     });
@@ -700,7 +700,7 @@ const InventoryContainer = Vue.createApp({
                     }
 
                     try {
-                        const response = await axios.post("https://qb-inventory/GiveItem", {
+                        const response = await axios.post("https://ps-inventory/GiveItem", {
                             item: selectedItem,
                             amount: amountToGive,
                             slot: selectedItem.slot,
@@ -780,7 +780,7 @@ const InventoryContainer = Vue.createApp({
             if (slotElement) {
                 slotElement.style.backgroundColor = "red";
             }
-            axios.post("https://qb-inventory/PlayDropFail", {}).catch((error) => {
+            axios.post("https://ps-inventory/PlayDropFail", {}).catch((error) => {
                 console.error("Error playing drop fail:", error);
             });
             setTimeout(() => {
@@ -811,7 +811,7 @@ const InventoryContainer = Vue.createApp({
                 this.selectedWeapon = this.contextMenuItem;
                 this.showWeaponAttachments = true;
                 axios
-                    .post("https://qb-inventory/GetWeaponData", JSON.stringify({ weapon: this.selectedWeapon.name, ItemData: this.selectedWeapon }))
+                    .post("https://ps-inventory/GetWeaponData", JSON.stringify({ weapon: this.selectedWeapon.name, ItemData: this.selectedWeapon }))
                     .then((response) => {
                         const data = response.data;
                         if (data.AttachmentData !== null && data.AttachmentData !== undefined) {
@@ -838,7 +838,7 @@ const InventoryContainer = Vue.createApp({
                 this.selectedWeaponAttachments.splice(index, 1);
             }
             axios
-                .post("https://qb-inventory/RemoveAttachment", JSON.stringify({ AttachmentData: attachment, WeaponData: this.selectedWeapon }))
+                .post("https://ps-inventory/RemoveAttachment", JSON.stringify({ AttachmentData: attachment, WeaponData: this.selectedWeapon }))
                 .then((response) => {
                     this.selectedWeapon = response.data.WeaponData;
                     if (response.data.Attachments) {
@@ -888,7 +888,7 @@ const InventoryContainer = Vue.createApp({
             let toInventoryName = toInventory === "other" ? this.otherInventoryName : toInventory;
 
             axios
-                .post("https://qb-inventory/SetInventoryData", {
+                .post("https://ps-inventory/SetInventoryData", {
                     fromInventory: fromInventoryName,
                     toInventory: toInventoryName,
                     fromSlot,
